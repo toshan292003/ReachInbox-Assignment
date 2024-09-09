@@ -30,7 +30,7 @@ export default function Home() {
     console.log(tok)
 
 
-    // Function to fetch data from API using auth token
+    // Function to fetch data from API using auth token 
     useEffect(() => {
         const fetchData = async () => {
             try {
