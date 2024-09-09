@@ -26,7 +26,7 @@ export default function Home() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
-    const [data, setdata] = useState(null);
+    const [data, setdata] = useState([]);
     console.log(tok)
 
 
@@ -58,7 +58,7 @@ export default function Home() {
         GetRandColor();
     }, []);
 
-    
+
     const [ProfColor, setProfColor] = useState("#152632");
     //Get Random Color function for User Profile
     const GetRandColor = () => {
@@ -150,15 +150,15 @@ export default function Home() {
                                 <img src={sun} alt="" />
                             </section>
                             <select style={{ color: ColorTheme.textcolor }}>
-                                    <option value="" style={{ backgroundColor:ColorTheme.primary_back }}>Toshan's Workspace</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Toshan's Workspace</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Toshan's Workspace</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Toshan's Workspace</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Toshan's Workspace</option>
-                                </select>
+                                <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Toshan's Workspace</option>
+                                <option style={{ backgroundColor: ColorTheme.primary_back }}>Toshan's Workspace</option>
+                                <option style={{ backgroundColor: ColorTheme.primary_back }}>Toshan's Workspace</option>
+                                <option style={{ backgroundColor: ColorTheme.primary_back }}>Toshan's Workspace</option>
+                                <option style={{ backgroundColor: ColorTheme.primary_back }}>Toshan's Workspace</option>
+                            </select>
                         </div>
                     </section>
-                    
+
                     {/* End of Secondary Navbar */}
 
                     {/* Start of Inbox page main Body */}
@@ -174,15 +174,27 @@ export default function Home() {
                                 <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} placeholder="Search" />
                             </div>
                             <div className="flex row center between">
-                                <p className="flex center row"><span style={{backgroundColor:ColorTheme.nav_back}}>26</span><b>New Replies</b></p>
+                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.nav_back }}>26</span><b>New Replies</b></p>
                                 <select style={{ color: ColorTheme.textcolor }}>
-                                    <option value="" style={{ backgroundColor:ColorTheme.primary_back }}>Newest</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Oldest</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Sort by Size</option>
-                                    <option style={{ backgroundColor:ColorTheme.primary_back }}>Alphabetical</option>
+                                    <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Newest</option>
+                                    <option style={{ backgroundColor: ColorTheme.primary_back }}>Oldest</option>
+                                    <option style={{ backgroundColor: ColorTheme.primary_back }}>Sort by Size</option>
+                                    <option style={{ backgroundColor: ColorTheme.primary_back }}>Alphabetical</option>
                                 </select>
                             </div>
+                            <div className="flex column center">
+                                <ul>
+                                    {data.map((user, index) => (
+                                        <li key={index} className="flex column">
+                                            <h1></h1>
+                                            <p></p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </section>
+                        {/* End of Left Side Inbox Section */}
+
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
 
                         </section>

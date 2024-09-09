@@ -110,7 +110,6 @@
     justify-content: space-evenly;
 }
 .bodyitem:nth-child(1){
-    flex-grow: 1;
     padding: 30px;
     gap: 15px;
 }
