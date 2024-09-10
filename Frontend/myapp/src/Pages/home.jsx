@@ -34,13 +34,11 @@ export default function Home() {
     //Function to format email dates
     function formatEmailDate(timestamp) {
         const date = new Date(timestamp);
-        console.log(timestamp)
 
         const formattedDate = date.toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric'
         });
-        console.log(formattedDate)
         return formattedDate;
     }
     //Function to truncate email subjects
@@ -106,7 +104,7 @@ export default function Home() {
 
     // Function to fetch data from API using auth token 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchEmailData = async () => {
             try {
                 const response = await fetch('https://hiring.reachinbox.xyz/api/v1/onebox/list', {
                     method: 'GET',
@@ -127,7 +125,7 @@ export default function Home() {
             }
         };
 
-        fetchData();
+        fetchEmailData();
         GetRandColor();
     }, []);
 
@@ -180,6 +178,38 @@ export default function Home() {
                 left: "40px",
                 Icons: [homeB, magB, sendB, moreB, inboxB, statisticsB]
             }));
+        }
+    }
+
+    //State and Function to handle click of an email and update thread variables
+    const [threadID,setThreadID] = useState("");
+    const [threadDetails,setThreadDetails] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const clickEmailBox = (index,ID) => {
+        setSelectedIndex(index);
+        setThreadID(ID);
+        getThreadDetails();
+    };
+
+    const getThreadDetails = async ()=>{
+        try {
+            const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tok}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            setThreadDetails(result)
+            console.log(result)
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
     }
 
@@ -257,7 +287,7 @@ export default function Home() {
                                     <option style={{ backgroundColor: ColorTheme.primary_back }}>Alphabetical</option>
                                 </select>
                             </div>
-                            <div className="flex column center" style={{gap:"0px"}}>
+                            <div className="flex column center" style={{ gap: "0px" }}>
                                 {/* {data === null && (
                                         <p>The object is null!</p>
                                     )}
@@ -269,7 +299,7 @@ export default function Home() {
                                     ))} */}
                                 {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
                                     sampleData.data.map((user, index) => (
-                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border}} key={index}>
+                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent'}} key={index} onClick={() => clickEmailBox(index,user.threadId)}>
                                             <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
                                             <h2>{truncateString(user.fromEmail, 15)}</h2>
                                             <p>{truncateString(user.subject, 30)}</p>
