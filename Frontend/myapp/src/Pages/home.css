@@ -128,9 +128,22 @@
 }
 
 .bodyitem:nth-child(1) {
+    position: relative;
     padding: 30px;
     gap: 15px;
-
+}
+.bodyitem:nth-child(1) button{
+    padding: 10px 17px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 5px;
+    right: 20px;
+    color: white;
+    position: absolute;
+    transition: all 0.5s ease;
+}
+.bodyitem:nth-child(1) button:hover{
+    cursor: pointer;
 }
 
 .bodyitem:nth-child(1) div {

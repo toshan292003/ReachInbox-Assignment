@@ -40,11 +40,17 @@
 }
 
 .threadBody {
+    position: relative;
     margin: 20px 0px;
     padding: 20px;
     width: 94%;
     border-radius: 5px;
     transition: all 0.5s ease;
+}
+.threadBody b{
+    font-weight: 400;
+    position: absolute;
+    right: 20px;
 }
 
 .threadBody h4 {

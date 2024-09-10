@@ -80,31 +80,30 @@ export default function Home() {
 
 
     // Function to fetch data from API using auth token 
-    useEffect(() => {
-        const fetchEmailData = async () => {
-            try {
-                const response = await fetch('https://hiring.reachinbox.xyz/api/v1/onebox/list', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${tok}`,
-                    },
-                });
+    const fetchEmailData = async () => {
+        try {
+            const response = await fetch('https://hiring.reachinbox.xyz/api/v1/onebox/list', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tok}`,
+                },
+            });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await response.json();
-                setData(result)
-                setNumEmails(result.data.length)
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
 
+            const result = await response.json();
+            setData(result)
+            setNumEmails(result.data.length)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
         fetchEmailData();
-        GetRandColor();
     }, []);
 
     useEffect(() => {
@@ -204,6 +203,30 @@ export default function Home() {
         }
     };
 
+
+
+    const resetAPI = async ()=>{
+        try {
+            const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reset`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tok}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            console.log(result.data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        fetchEmailData();
+    }
+
     useEffect(() => {
         window.addEventListener('keydown', handleKeyPress);
         return () => {
@@ -270,6 +293,7 @@ export default function Home() {
                         {/* Start of Left Side Inbox Section */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             <h1>All Inbox&#40;s&#41;</h1>
+                            <button style={{border:ColorTheme.border, backgroundColor:ColorTheme.nav_back}} onClick={resetAPI}>&#8634;</button>
                             <p>
                                 <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
@@ -327,7 +351,7 @@ export default function Home() {
                                                                 </span>
                                                             </div>
                                                             <div className="flex column threadBody" style={{ backgroundColor: ColorTheme.nav_back, border: ColorTheme.border, boxShadow: ColorTheme.boxshadow }}>
-                                                                <b>{convertTimestamp(user.createdAt)}</b>
+                                                                <b style={{color:ColorTheme.secondarytextcolor}}>{convertTimestamp(user.createdAt)}</b>
                                                                 <h4>{user.fromName}</h4>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>from : {user.fromEmail}</span>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>to : {user.toEmail}</span>
