@@ -21,6 +21,8 @@ import statisticsW from "../Images/statisticsW.png";
 import sun from "../Images/sun.png"
 import moon from "../Images/night.png"
 
+// Importing Components
+import EmailCard from "../components/EmailCard";
 
 export default function Home() {
 
@@ -28,6 +30,57 @@ export default function Home() {
     const tok = searchParams.get("token")
     const [data, setData] = useState([]);
 
+    const sampleData = {
+        "status": 200,
+        "data": [
+            {
+                "id": 97728,
+                "fromName": "Shaw Adley",
+                "fromEmail": "shaw@getmemeetings.com",
+                "toName": "",
+                "toEmail": "mitrajit2022@gmail.com",
+                "cc": [],
+                "bcc": [],
+                "threadId": 65177,
+                "messageId": "<68Jt4CxTIm6sYi@getmemeetings.com>",
+                "inReplyTo": "<6woWrxD3kzMjZq@gmail.com>",
+                "references": "<6woWrxD3kzMjZq@gmail.com>",
+                "subject": "Shaw - following up on our meeting last week... | 7ZG2ZTV 6KG634E",
+                "body": "<p>Hi Mitrajit,</p><p>Just wondering if you&rsquo;re still interested.</p><p>Regards,<br/>Shaw Adley</p><p>6KG634E practicecowboy</p>",
+                "isRead": true,
+                "folder": "INBOX",
+                "uid": 594,
+                "sentAt": "2022-02-02T16:19:48.000Z",
+                "archivedAt": null,
+                "deletedAt": null,
+                "createdAt": "2024-09-09T16:19:48.000Z",
+                "updatedAt": "2024-09-09T16:19:48.000Z"
+            },
+            {
+                "id": 97729,
+                "fromName": "Shaw Adley",
+                "fromEmail": "shaw@getmemeetings.com",
+                "toName": "",
+                "toEmail": "mitrajit2022@gmail.com",
+                "cc": [],
+                "bcc": [],
+                "threadId": 65178,
+                "messageId": "<68Jt4CxTIm6sYi@getmemeetings.com>",
+                "inReplyTo": "<6woWrxD3kzMjZq@gmail.com>",
+                "references": "<6woWrxD3kzMjZq@gmail.com>",
+                "subject": "Test mail",
+                "body": "<p>Test mail</p>",
+                "isRead": true,
+                "folder": "INBOX",
+                "uid": 594,
+                "sentAt": "2022-02-03T16:19:48.000Z",
+                "archivedAt": null,
+                "deletedAt": null,
+                "createdAt": "2024-09-09T16:19:48.000Z",
+                "updatedAt": "2024-09-09T16:19:48.000Z"
+            }
+        ]
+    }
 
     // Function to fetch data from API using auth token 
     useEffect(() => {
@@ -193,11 +246,10 @@ export default function Home() {
                                             <p></p>
                                         </li>
                                     ))} */}
-                                    {Array.isArray(data) && data.length > 0 ? (
-                                        data.map((user, index) => (
+                                    {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
+                                        sampleData.data.map((user, index) => (
                                             <li key={index} className="flex column">
-                                                <h1>Name</h1>
-                                                <p>Email</p>
+                                                <EmailCard fromEmail={user.fromEmail} subject={user.subject} border={ColorTheme.border}></EmailCard>
                                             </li>
                                         ))
                                     ) : (
