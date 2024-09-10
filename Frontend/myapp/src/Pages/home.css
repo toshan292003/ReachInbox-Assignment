@@ -122,7 +122,7 @@
 
 .body {
     display: grid;
-    grid-template-columns: 30% 50% 20%;
+    grid-template-columns: 27% 50% 22%;
     height: 100vh;
     justify-content: space-evenly;
 }

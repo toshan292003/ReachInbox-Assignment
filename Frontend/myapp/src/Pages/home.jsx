@@ -28,9 +28,13 @@ import { useRef } from "react";
 
 export default function Home() {
 
+    //Defining Important States and Hooks
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
     const [data, setData] = useState([]);
+    const[numEmails,setNumEmails] = useState(0);
+    const[selectedEmails,setSelectedEmails] = useState(0);
+    const[newReplies,setNewReplies] = useState(0);
 
     const scrollDiv = useRef(null);
 
@@ -50,6 +54,22 @@ export default function Home() {
         });
         return formattedDate;
     }
+    //Function to convert time stamp to Email Date + time
+    function convertTimestamp(timestamp) {
+        const date = new Date(timestamp);
+      
+        const day = date.getUTCDate();
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.getUTCFullYear();
+      
+        let hours = date.getUTCHours();
+        const minutes = date.getUTCMinutes();
+      
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+        return `${day} ${month} ${year} : ${hours}:${formattedMinutes}${ampm}`;
+      }
     //Function to truncate email subjects
     function truncateString(str, n) {
         if (str.length > n) {
@@ -77,16 +97,18 @@ export default function Home() {
 
                 const result = await response.json();
                 setData(result)
+                setNumEmails(result.data.length)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
+        
         fetchEmailData();
         GetRandColor();
     }, []);
-
+    
     useEffect(() => {
+        console.log(numEmails)
         console.log('Data updated:', data);
     }, [data]);
 
@@ -148,6 +170,7 @@ export default function Home() {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const clickEmailBox = (index, ID) => {
         setSelectedIndex(index);
+        setSelectedEmails(1);
         setThreadID(ID);
         getThreadDetails();
     };
@@ -234,13 +257,13 @@ export default function Home() {
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             <h1>All Inbox&#40;s&#41;</h1>
                             <p>
-                                <b>25/25</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
+                                <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
                             <div className="search">
                                 <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} placeholder="Search" />
                             </div>
                             <div className="flex row center between">
-                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.nav_back }}>26</span><b>New Replies</b></p>
+                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.nav_back }}>{newReplies}</span><b>New Replies</b></p>
                                 <select style={{ color: ColorTheme.textcolor }}>
                                     <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Newest</option>
                                     <option style={{ backgroundColor: ColorTheme.primary_back }}>Oldest</option>
