@@ -27,7 +27,6 @@ export default function Home() {
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
     const [data, setdata] = useState([]);
-    console.log(tok)
 
 
     // Function to fetch data from API using auth token 
@@ -47,8 +46,8 @@ export default function Home() {
                 }
 
                 const result = await response.json();
-                console.log(result);
                 setdata(result)
+                console.log(data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -184,12 +183,25 @@ export default function Home() {
                             </div>
                             <div className="flex column center">
                                 <ul>
+                                    {/* {data === null && (
+                                        <p>The object is null!</p>
+                                    )}
                                     {data.map((user, index) => (
                                         <li key={index} className="flex column">
                                             <h1></h1>
                                             <p></p>
                                         </li>
-                                    ))}
+                                    ))} */}
+                                    {Array.isArray(data) && data.length > 0 ? (
+                                        data.map((user, index) => (
+                                            <li key={index} className="flex column">
+                                                <h1>{user.name}</h1>
+                                                <p>{user.info}</p>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p>No data available</p>
+                                    )}
                                 </ul>
                             </div>
                         </section>
@@ -203,7 +215,7 @@ export default function Home() {
                         </section>
                     </section>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
