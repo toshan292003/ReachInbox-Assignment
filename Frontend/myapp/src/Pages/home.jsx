@@ -22,6 +22,7 @@ import statisticsW from "../Images/statisticsW.png";
 
 import sun from "../Images/sun.png"
 import moon from "../Images/night.png"
+import { useRef } from "react";
 
 // Importing Components
 
@@ -31,6 +32,13 @@ export default function Home() {
     const tok = searchParams.get("token")
     const [data, setData] = useState([]);
 
+    const scrollDiv = useRef(null);
+
+    const handleScroll = (e) => {
+        if (scrollDiv.current) {
+            scrollDiv.current.scrollTop += e.deltaY*0.5; 
+        }
+    };
 
     //Function to format email dates
     function formatEmailDate(timestamp) {
@@ -50,58 +58,6 @@ export default function Home() {
         return str;
     }
 
-
-    const sampleData = {
-        "status": 200,
-        "data": [
-            {
-                "id": 97728,
-                "fromName": "Shaw Adley",
-                "fromEmail": "shaw@getmemeetings.com",
-                "toName": "",
-                "toEmail": "mitrajit2022@gmail.com",
-                "cc": [],
-                "bcc": [],
-                "threadId": 65177,
-                "messageId": "<68Jt4CxTIm6sYi@getmemeetings.com>",
-                "inReplyTo": "<6woWrxD3kzMjZq@gmail.com>",
-                "references": "<6woWrxD3kzMjZq@gmail.com>",
-                "subject": "Shaw - following up on our meeting last week... | 7ZG2ZTV 6KG634E",
-                "body": "<p>Hi Mitrajit,</p><p>Just wondering if you&rsquo;re still interested.</p><p>Regards,<br/>Shaw Adley</p><p>6KG634E practicecowboy</p>",
-                "isRead": true,
-                "folder": "INBOX",
-                "uid": 594,
-                "sentAt": "2022-02-02T16:19:48.000Z",
-                "archivedAt": null,
-                "deletedAt": null,
-                "createdAt": "2024-09-09T16:19:48.000Z",
-                "updatedAt": "2024-09-09T16:19:48.000Z"
-            },
-            {
-                "id": 97729,
-                "fromName": "Shaw Adley",
-                "fromEmail": "shaw@getmemeetings.com",
-                "toName": "",
-                "toEmail": "mitrajit2022@gmail.com",
-                "cc": [],
-                "bcc": [],
-                "threadId": 65178,
-                "messageId": "<68Jt4CxTIm6sYi@getmemeetings.com>",
-                "inReplyTo": "<6woWrxD3kzMjZq@gmail.com>",
-                "references": "<6woWrxD3kzMjZq@gmail.com>",
-                "subject": "Test mail",
-                "body": "<p>Test mail</p>",
-                "isRead": true,
-                "folder": "INBOX",
-                "uid": 594,
-                "sentAt": "2022-02-03T16:19:48.000Z",
-                "archivedAt": null,
-                "deletedAt": null,
-                "createdAt": "2024-09-09T16:19:48.000Z",
-                "updatedAt": "2024-09-09T16:19:48.000Z"
-            }
-        ]
-    }
 
     // Function to fetch data from API using auth token 
     useEffect(() => {
@@ -152,7 +108,8 @@ export default function Home() {
         primary_back: "#000000",
         secondary_back: "#202020",
         nav_back: "#101010",
-        datebox:"#151515",
+        datebox: "#151515",
+        boxshadow: "0px 5px 20px rgba(255,255,255,0.1)",
         border: "1px solid #303030",
         left: "5px",
         logo: Logo,
@@ -174,9 +131,10 @@ export default function Home() {
                 secondarytextcolor: "#606060",
                 primary_back: "#FFFFFF",
                 border: "1px solid #AAAAAA",
-                datebox:"#CCCCCC",
+                datebox: "#CCCCCC",
+                boxshadow: "0px 5px 20px rgba(0,0,0,0.1)",
                 secondary_back: "#FFFFFF",
-                nav_back: "#FFFFFF",
+                nav_back: "transparent",
                 logo: LogoB,
                 left: "40px",
                 Icons: [homeB, magB, sendB, moreB, inboxB, statisticsB]
@@ -312,20 +270,42 @@ export default function Home() {
                                 <>
                                     <section className="flex row between threadnav" style={{ borderBottom: ColorTheme.border }}>
                                         <div>
-                                            <h3>{sampleData.data[selectedIndex].fromName}</h3>
-                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{sampleData.data[selectedIndex].fromEmail}</span>
+                                            <h3>{data.data[selectedIndex].fromName}</h3>
+                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{data.data[selectedIndex].fromEmail}</span>
                                         </div>
                                         <div>
-                                            
+
                                         </div>
                                     </section>
-                                    <section className="flex column center threadbox">
-                                        <div className="flex center row">
-                                            <b style={{backgroundColor:ColorTheme.datebox}}></b>
-                                            <span style={{backgroundColor:ColorTheme.datebox}}>
-                                                21 Feb
-                                            </span>
-                                        </div>
+                                    <section className="flex column center threadbox" onWheel={handleScroll} ref={scrollDiv}>
+                                        {threadDetails !== null ?
+                                            <>
+                                                {Array.isArray(threadDetails.data) && threadDetails.data.length > 0 ? (
+                                                    threadDetails.data.map((user, index) => (
+                                                        <>
+                                                            <div className="flex center row threadDate">
+                                                                <b style={{ backgroundColor: ColorTheme.datebox }}></b>
+                                                                <span style={{ backgroundColor: ColorTheme.datebox }}>
+                                                                    {formatEmailDate(user.createdAt)}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex column threadBody" style={{ backgroundColor: ColorTheme.nav_back, border: ColorTheme.border, boxShadow: ColorTheme.boxshadow }}>
+                                                                <h4>{user.fromName}</h4>
+                                                                <span style={{ color: ColorTheme.secondarytextcolor }}>from : {user.fromEmail}</span>
+                                                                <span style={{ color: ColorTheme.secondarytextcolor }}>to : {user.toEmail}</span>
+                                                                <div dangerouslySetInnerHTML={{ __html: user.body }} />
+                                                            </div>
+                                                        </>
+                                                    ))
+                                                ) : (
+                                                    <p>No data available</p>
+                                                )}
+                                            </>
+                                            : null
+                                        }
+                                        <button>
+                                            Reply
+                                        </button>
                                     </section>
                                 </>
                                 : null
