@@ -1,14 +1,25 @@
 .bodyitem:nth-child(2) section{
     padding: 20px 30px;
 }
-
-.threadnav{
-    
-}
-
 .threadnav h3{
     font-size: 1rem;
 }
 .threadnav span{
     font-size: 0.8rem;
+}
+
+.threadbox div:nth-child(1){
+    width: 100%;
+    position: relative;
+}
+.threadbox div:nth-child(1) span{
+    padding: 5px 10px;
+    z-index: 1;
+    transition: all 0.5s ease;
+}
+.threadbox div:nth-child(1) b{
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    transition: all 0.5s ease;
 }

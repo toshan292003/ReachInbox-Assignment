@@ -152,6 +152,7 @@ export default function Home() {
         primary_back: "#000000",
         secondary_back: "#202020",
         nav_back: "#101010",
+        datebox:"#151515",
         border: "1px solid #303030",
         left: "5px",
         logo: Logo,
@@ -173,6 +174,7 @@ export default function Home() {
                 secondarytextcolor: "#606060",
                 primary_back: "#FFFFFF",
                 border: "1px solid #AAAAAA",
+                datebox:"#CCCCCC",
                 secondary_back: "#FFFFFF",
                 nav_back: "#FFFFFF",
                 logo: LogoB,
@@ -300,17 +302,6 @@ export default function Home() {
                                 ) : (
                                     <p>No data available</p>
                                 )}
-                                {/* {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
-                                    sampleData.data.map((user, index) => (
-                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
-                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
-                                            <h2>{truncateString(user.fromEmail, 15)}</h2>
-                                            <p>{truncateString(user.subject, 30)}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No data available</p>
-                                )} */}
                             </div>
                         </section>
                         {/* End of Left Side Inbox Section */}
@@ -318,13 +309,25 @@ export default function Home() {
                         {/* Start of Middle Inbox Section for Displaying Thread Details */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             {selectedIndex !== null ?
-                                <section className="flex row between threadnav" style={{ borderBottom: ColorTheme.border }}>
-                                    <div>
-                                        <h3>{sampleData.data[selectedIndex].fromName}</h3>
-                                        <span style={{ color: ColorTheme.secondarytextcolor }}>{sampleData.data[selectedIndex].fromEmail}</span>
-                                    </div>
-                                    <div></div>
-                                </section>
+                                <>
+                                    <section className="flex row between threadnav" style={{ borderBottom: ColorTheme.border }}>
+                                        <div>
+                                            <h3>{sampleData.data[selectedIndex].fromName}</h3>
+                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{sampleData.data[selectedIndex].fromEmail}</span>
+                                        </div>
+                                        <div>
+                                            
+                                        </div>
+                                    </section>
+                                    <section className="flex column center threadbox">
+                                        <div className="flex center row">
+                                            <b style={{backgroundColor:ColorTheme.datebox}}></b>
+                                            <span style={{backgroundColor:ColorTheme.datebox}}>
+                                                21 Feb
+                                            </span>
+                                        </div>
+                                    </section>
+                                </>
                                 : null
                             }
                         </section>
