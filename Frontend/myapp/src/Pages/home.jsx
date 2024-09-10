@@ -26,7 +26,7 @@ export default function Home() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
-    const [data, setdata] = useState([]);
+    const [data, setData] = useState([]);
 
 
     // Function to fetch data from API using auth token 
@@ -46,8 +46,7 @@ export default function Home() {
                 }
 
                 const result = await response.json();
-                setdata(result)
-                console.log(data)
+                setData(result)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -57,6 +56,9 @@ export default function Home() {
         GetRandColor();
     }, []);
 
+    useEffect(() => {
+        console.log('Data updated:', data);
+      }, [data]);
 
     const [ProfColor, setProfColor] = useState("#152632");
     //Get Random Color function for User Profile
@@ -65,7 +67,6 @@ export default function Home() {
         for (let i = 0; i < 3; i++) {
             color = color + Math.floor(Math.random() * 51);
         }
-        console.log(color);
         setProfColor(color);
     }
 
@@ -80,7 +81,7 @@ export default function Home() {
         border: "1px solid #303030",
         left: "5px",
         logo: Logo,
-        Icons: [homeW, sendW, moreW, inboxW, statisticsW]
+        Icons: [homeW,magW , sendW, moreW, inboxW, statisticsW]
     }
     const [ColorTheme, setColorTheme] = useState(defaultColorMode);
 
@@ -102,7 +103,7 @@ export default function Home() {
                 nav_back: "#FFFFFF",
                 logo: LogoB,
                 left: "40px",
-                Icons: [homeB, sendB, moreB, inboxB, statisticsB]
+                Icons: [homeB, magB, sendB, moreB, inboxB, statisticsB]
             }));
         }
     }
@@ -195,8 +196,8 @@ export default function Home() {
                                     {Array.isArray(data) && data.length > 0 ? (
                                         data.map((user, index) => (
                                             <li key={index} className="flex column">
-                                                <h1>{user.name}</h1>
-                                                <p>{user.info}</p>
+                                                <h1>Name</h1>
+                                                <p>Email</p>
                                             </li>
                                         ))
                                     ) : (

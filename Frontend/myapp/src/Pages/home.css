@@ -24,7 +24,7 @@
     width: 160%;
 }
 .navbar-item2{
-    gap: 50px;
+    gap: 40px;
     flex-grow: 2;
     padding: 50px 0px;
 }
@@ -35,7 +35,7 @@
     transition: all 0.5s ease;
 
 }
-.navbar-item2 div:nth-child(4){
+.navbar-item2 div:nth-child(5){
     background-color: rgba(255, 255, 255, 0.1);
 }
 .navbar-item2 img{
