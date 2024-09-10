@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "./home.css";
-import "../components/emailcard.css";
-import "../components/threads.css"
+
 import { useLocation, useSearchParams } from 'react-router-dom';
 
 /*Importing All Images*/
@@ -25,6 +24,9 @@ import moon from "../Images/night.png"
 import { useRef } from "react";
 
 // Importing Components
+import "../components/emailcard.css";
+import "../components/threads.css";
+import "../components/deletemodel.css";
 
 export default function Home() {
 
@@ -35,6 +37,7 @@ export default function Home() {
     const [numEmails, setNumEmails] = useState(0);
     const [selectedEmails, setSelectedEmails] = useState(0);
     const [newReplies, setNewReplies] = useState(0);
+    const [deletePopup, setdeletePopup] = useState(false);
 
     const scrollDiv = useRef(null);
 
@@ -198,14 +201,21 @@ export default function Home() {
 
     const handleKeyPress = (event) => {
         if (event.key === 'd') {
-            if(selectedIndex !== null){
+            if (selectedIndex !== null) {
                 deleteSelectedEmail();
             }
             console.log("Key pressed.")
         }
     };
 
-    const deleteSelectedEmail = async ()=>{
+    const openDeleteModel = ()=>{
+        setdeletePopup(true);
+    }
+    const cancelDelete = ()=>{
+        setdeletePopup(false);
+    }
+
+    const deleteSelectedEmail = async () => {
         try {
             const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${data.data[selectedIndex].threadId}`, {
                 method: 'DELETE',
@@ -227,9 +237,10 @@ export default function Home() {
         fetchEmailData();
         setSelectedIndex(null);
         setSelectedEmails(0);
+        setdeletePopup(false);
     }
 
-    const resetAPI = async ()=>{
+    const resetAPI = async () => {
         try {
             const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reset`, {
                 method: 'GET',
@@ -319,7 +330,7 @@ export default function Home() {
                         {/* Start of Left Side Inbox Section */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             <h1>All Inbox&#40;s&#41;</h1>
-                            <button style={{border:ColorTheme.border, backgroundColor:ColorTheme.nav_back}} onClick={resetAPI}>&#8634;</button>
+                            <button style={{ border: ColorTheme.border, backgroundColor: ColorTheme.nav_back }} onClick={resetAPI}>&#8634;</button>
                             <p>
                                 <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
@@ -377,7 +388,7 @@ export default function Home() {
                                                                 </span>
                                                             </div>
                                                             <div className="flex column threadBody" style={{ backgroundColor: ColorTheme.nav_back, border: ColorTheme.border, boxShadow: ColorTheme.boxshadow }}>
-                                                                <b style={{color:ColorTheme.secondarytextcolor}}>{convertTimestamp(user.createdAt)}</b>
+                                                                <b style={{ color: ColorTheme.secondarytextcolor }}>{convertTimestamp(user.createdAt)}</b>
                                                                 <h4>{user.fromName}</h4>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>from : {user.fromEmail}</span>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>to : {user.toEmail}</span>
@@ -392,7 +403,7 @@ export default function Home() {
                                             : null
                                         }
                                         <div>
-                                            <button onClick={deleteSelectedEmail}>Delete</button>
+                                            <button onClick={openDeleteModel}>Delete</button>
                                             <button>Reply</button>
                                         </div>
                                     </section>
@@ -404,11 +415,55 @@ export default function Home() {
 
                         {/* Start of Last Inbox Section for displaying Company Details */}
                         <section className="bodyitem flex column">
-
+                            <div>
+                                <h2>Lead Details</h2>
+                                <ul>
+                                    <li>
+                                        <span style={{color:ColorTheme.textcolor}}>Name</span>
+                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
+                                    </li>
+                                    <li>
+                                        <span style={{color:ColorTheme.textcolor}}>Contact No</span>
+                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
+                                    </li>
+                                    <li>
+                                        <span style={{color:ColorTheme.textcolor}}>Email ID</span>
+                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
+                                    </li>
+                                    <li>
+                                        <span style={{color:ColorTheme.textcolor}}>Linkedin</span>
+                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
+                                    </li>
+                                    <li>
+                                        <span style={{color:ColorTheme.textcolor}}>Company Name</span>
+                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
+                                    </li>
+                                </ul>
+                            </div>
                         </section>
+                        {/* Start of Last Inbox Section for displaying Company Details */}
+
                     </section>
                 </div>
-            </div >
+            </div>
+            {/* Start of Delete Popup */}
+            {deletePopup == true ?
+                <>
+                    <div className="deletemodel flex column center">
+                        <section>
+                            <h1>Are you sure?</h1>
+                            <p>Your Selected Email will be deleted</p>
+                            <div>
+                                <button onClick={cancelDelete}>Cancel</button>
+                                <button onClick={deleteSelectedEmail}>Delete</button>
+                            </div>
+                        </section>
+                    </div>
+                </>
+                :
+                (<></>)
+            }
+            {/* End of Delete Popup */}
         </>
     )
 }
