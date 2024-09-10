@@ -269,7 +269,7 @@ export default function Home() {
                                     ))} */}
                                 {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
                                     sampleData.data.map((user, index) => (
-                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border }} key={index}>
+                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border}} key={index}>
                                             <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
                                             <h2>{truncateString(user.fromEmail, 15)}</h2>
                                             <p>{truncateString(user.subject, 30)}</p>

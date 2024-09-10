@@ -16,3 +16,11 @@
     position: absolute;
     right: 10px;
 }
+
+.emailcard:hover{
+    background-color: rgba(128, 128, 128, 0.2);
+    cursor: pointer;
+}
+.emailcard:focus{
+    border-left: 3px solid ;
+}
