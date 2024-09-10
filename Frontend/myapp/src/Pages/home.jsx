@@ -27,6 +27,7 @@ import { useRef } from "react";
 import "../components/emailcard.css";
 import "../components/threads.css";
 import "../components/deletemodel.css";
+import "../components/misc.css";
 
 export default function Home() {
 
@@ -132,6 +133,7 @@ export default function Home() {
         primary_back: "#000000",
         secondary_back: "#202020",
         nav_back: "#101010",
+        misc_back:"#101010",
         datebox: "#151515",
         boxshadow: "0px 5px 20px rgba(255,255,255,0.1)",
         border: "1px solid #303030",
@@ -156,6 +158,7 @@ export default function Home() {
                 primary_back: "#FFFFFF",
                 border: "1px solid #AAAAAA",
                 datebox: "#CCCCCC",
+                misc_back:"#DDDDDD",
                 boxshadow: "0px 5px 20px rgba(0,0,0,0.1)",
                 secondary_back: "#FFFFFF",
                 nav_back: "transparent",
@@ -208,10 +211,10 @@ export default function Home() {
         }
     };
 
-    const openDeleteModel = ()=>{
+    const openDeleteModel = () => {
         setdeletePopup(true);
     }
-    const cancelDelete = ()=>{
+    const cancelDelete = () => {
         setdeletePopup(false);
     }
 
@@ -330,7 +333,7 @@ export default function Home() {
                         {/* Start of Left Side Inbox Section */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             <h1>All Inbox&#40;s&#41;</h1>
-                            <button style={{ border: ColorTheme.border, backgroundColor: ColorTheme.nav_back }} onClick={resetAPI}>&#8634;</button>
+                            <button style={{ border: ColorTheme.border, backgroundColor: ColorTheme.misc_back ,color:ColorTheme.textcolor}} onClick={resetAPI}>&#8634;</button>
                             <p>
                                 <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
@@ -338,7 +341,7 @@ export default function Home() {
                                 <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} placeholder="Search" />
                             </div>
                             <div className="flex row center between">
-                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.nav_back }}>{newReplies}</span><b>New Replies</b></p>
+                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.misc_back }}>{newReplies}</span><b>New Replies</b></p>
                                 <select style={{ color: ColorTheme.textcolor }}>
                                     <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Newest</option>
                                     <option style={{ backgroundColor: ColorTheme.primary_back }}>Oldest</option>
@@ -415,31 +418,60 @@ export default function Home() {
 
                         {/* Start of Last Inbox Section for displaying Company Details */}
                         <section className="bodyitem flex column">
-                            <div>
-                                <h2>Lead Details</h2>
-                                <ul>
-                                    <li>
-                                        <span style={{color:ColorTheme.textcolor}}>Name</span>
-                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
-                                    </li>
-                                    <li>
-                                        <span style={{color:ColorTheme.textcolor}}>Contact No</span>
-                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
-                                    </li>
-                                    <li>
-                                        <span style={{color:ColorTheme.textcolor}}>Email ID</span>
-                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
-                                    </li>
-                                    <li>
-                                        <span style={{color:ColorTheme.textcolor}}>Linkedin</span>
-                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
-                                    </li>
-                                    <li>
-                                        <span style={{color:ColorTheme.textcolor}}>Company Name</span>
-                                        <span style={{color:ColorTheme.secondarytextcolor}}></span>
-                                    </li>
-                                </ul>
-                            </div>
+                            {
+                                selectedIndex !== null ?
+                                    <>
+                                        <div className="flex column">
+                                            <h2 style={{backgroundColor:ColorTheme.misc_back}}>Lead Details</h2>
+                                            <ul className="flex column">
+                                                <li>
+                                                    <span style={{ color: ColorTheme.textcolor }}>Name</span>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>{data.data[selectedIndex].fromName}</span>
+                                                </li>
+                                                <li>
+                                                    <span style={{ color: ColorTheme.textcolor }}>Contact No</span>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>+91 9062827869</span>
+                                                </li>
+                                                <li>
+                                                    <span style={{ color: ColorTheme.textcolor }}>Email ID</span>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>{data.data[selectedIndex].fromEmail}</span>
+                                                </li>
+                                                <li>
+                                                    <span style={{ color: ColorTheme.textcolor }}>Linkedin</span>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>linkedin.com/in/timvadde/</span>
+                                                </li>
+                                                <li>
+                                                    <span style={{ color: ColorTheme.textcolor }}>Company Name</span>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>Reachinbox</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className="flex column">
+                                            <h2 style={{backgroundColor:ColorTheme.misc_back}}>Activities</h2>
+                                            <p>Campaign Name</p>
+                                            <p style={{color:ColorTheme.secondarytextcolor}}>3 Steps | 5 Days in Sequence</p>
+                                            <ul className="flex column">
+                                                <hr style={{backgroundColor:ColorTheme.misc_back}} />
+                                                <li className="flex row">
+                                                    <section className="flex row center" style={{border:ColorTheme.border,backgroundColor:ColorTheme.misc_back}}><img src={ColorTheme.Icons[2]}/></section>
+                                                    <section className="flex column">
+                                                        <span style={{color:ColorTheme.textcolor}}>Step 1 : Email</span>
+                                                        <span style={{color:ColorTheme.secondarytextcolor}}>Sent 3rd, Feb</span>
+                                                    </section>
+                                                </li>
+                                                <li className="flex row">
+                                                    <section className="flex row center" style={{border:ColorTheme.border,backgroundColor:ColorTheme.misc_back}}><img src={ColorTheme.Icons[2]}/></section>
+                                                    <section className="flex column">
+                                                        <span style={{color:ColorTheme.textcolor}}>Step 2 : Email</span>
+                                                        <span style={{color:ColorTheme.secondarytextcolor}}>Opened 5th, Feb</span>
+                                                    </section>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </>
+                                    : (<></>)
+                            }
+
                         </section>
                         {/* Start of Last Inbox Section for displaying Company Details */}
 
