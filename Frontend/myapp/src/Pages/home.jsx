@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "./home.css";
+import "../components/emailcard.css";
 import { useLocation, useSearchParams } from 'react-router-dom';
 
 /*Importing All Images*/
@@ -22,13 +23,34 @@ import sun from "../Images/sun.png"
 import moon from "../Images/night.png"
 
 // Importing Components
-import EmailCard from "../components/EmailCard";
 
 export default function Home() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
     const [data, setData] = useState([]);
+
+
+    //Function to format email dates
+    function formatEmailDate(timestamp) {
+        const date = new Date(timestamp);
+        console.log(timestamp)
+
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+        console.log(formattedDate)
+        return formattedDate;
+    }
+    //Function to truncate email subjects
+    function truncateString(str, n) {
+        if (str.length > n) {
+            return str.substring(0, n) + '...';
+        }
+        return str;
+    }
+
 
     const sampleData = {
         "status": 200,
@@ -111,7 +133,7 @@ export default function Home() {
 
     useEffect(() => {
         console.log('Data updated:', data);
-      }, [data]);
+    }, [data]);
 
     const [ProfColor, setProfColor] = useState("#152632");
     //Get Random Color function for User Profile
@@ -134,7 +156,7 @@ export default function Home() {
         border: "1px solid #303030",
         left: "5px",
         logo: Logo,
-        Icons: [homeW,magW , sendW, moreW, inboxW, statisticsW]
+        Icons: [homeW, magW, sendW, moreW, inboxW, statisticsW]
     }
     const [ColorTheme, setColorTheme] = useState(defaultColorMode);
 
@@ -235,9 +257,8 @@ export default function Home() {
                                     <option style={{ backgroundColor: ColorTheme.primary_back }}>Alphabetical</option>
                                 </select>
                             </div>
-                            <div className="flex column center">
-                                <ul>
-                                    {/* {data === null && (
+                            <div className="flex column center" style={{gap:"0px"}}>
+                                {/* {data === null && (
                                         <p>The object is null!</p>
                                     )}
                                     {data.map((user, index) => (
@@ -246,16 +267,17 @@ export default function Home() {
                                             <p></p>
                                         </li>
                                     ))} */}
-                                    {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
-                                        sampleData.data.map((user, index) => (
-                                            <li key={index} className="flex column">
-                                                <EmailCard fromEmail={user.fromEmail} subject={user.subject} border={ColorTheme.border}></EmailCard>
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <p>No data available</p>
-                                    )}
-                                </ul>
+                                {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
+                                    sampleData.data.map((user, index) => (
+                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border }} key={index}>
+                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
+                                            <h2>{truncateString(user.fromEmail, 15)}</h2>
+                                            <p>{truncateString(user.subject, 30)}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No data available</p>
+                                )}
                             </div>
                         </section>
                         {/* End of Left Side Inbox Section */}
