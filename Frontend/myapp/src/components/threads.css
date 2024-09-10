@@ -1,0 +1,14 @@
+.bodyitem:nth-child(2) section{
+    padding: 20px 30px;
+}
+
+.threadnav{
+    
+}
+
+.threadnav h3{
+    font-size: 1rem;
+}
+.threadnav span{
+    font-size: 0.8rem;
+}

@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import "./home.css";
 import "../components/emailcard.css";
+import "../components/threads.css"
 import { useLocation, useSearchParams } from 'react-router-dom';
 
 /*Importing All Images*/
@@ -182,16 +183,16 @@ export default function Home() {
     }
 
     //State and Function to handle click of an email and update thread variables
-    const [threadID,setThreadID] = useState("");
-    const [threadDetails,setThreadDetails] = useState(null);
+    const [threadID, setThreadID] = useState("");
+    const [threadDetails, setThreadDetails] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
-    const clickEmailBox = (index,ID) => {
+    const clickEmailBox = (index, ID) => {
         setSelectedIndex(index);
         setThreadID(ID);
         getThreadDetails();
     };
 
-    const getThreadDetails = async ()=>{
+    const getThreadDetails = async () => {
         try {
             const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadID}`, {
                 method: 'GET',
@@ -267,7 +268,7 @@ export default function Home() {
                     {/* End of Secondary Navbar */}
 
                     {/* Start of Inbox page main Body */}
-                    <section className="body flex row">
+                    <section className="body">
 
                         {/* Start of Left Side Inbox Section */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
@@ -288,18 +289,9 @@ export default function Home() {
                                 </select>
                             </div>
                             <div className="flex column center" style={{ gap: "0px" }}>
-                                {/* {data === null && (
-                                        <p>The object is null!</p>
-                                    )}
-                                    {data.map((user, index) => (
-                                        <li key={index} className="flex column">
-                                            <h1></h1>
-                                            <p></p>
-                                        </li>
-                                    ))} */}
-                                {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
-                                    sampleData.data.map((user, index) => (
-                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent'}} key={index} onClick={() => clickEmailBox(index,user.threadId)}>
+                                {Array.isArray(data.data) && data.data.length > 0 ? (
+                                    data.data.map((user, index) => (
+                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
                                             <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
                                             <h2>{truncateString(user.fromEmail, 15)}</h2>
                                             <p>{truncateString(user.subject, 30)}</p>
@@ -308,13 +300,37 @@ export default function Home() {
                                 ) : (
                                     <p>No data available</p>
                                 )}
+                                {/* {Array.isArray(sampleData.data) && sampleData.data.length > 0 ? (
+                                    sampleData.data.map((user, index) => (
+                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
+                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
+                                            <h2>{truncateString(user.fromEmail, 15)}</h2>
+                                            <p>{truncateString(user.subject, 30)}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No data available</p>
+                                )} */}
                             </div>
                         </section>
                         {/* End of Left Side Inbox Section */}
 
+                        {/* Start of Middle Inbox Section for Displaying Thread Details */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
-
+                            {selectedIndex !== null ?
+                                <section className="flex row between threadnav" style={{ borderBottom: ColorTheme.border }}>
+                                    <div>
+                                        <h3>{sampleData.data[selectedIndex].fromName}</h3>
+                                        <span style={{ color: ColorTheme.secondarytextcolor }}>{sampleData.data[selectedIndex].fromEmail}</span>
+                                    </div>
+                                    <div></div>
+                                </section>
+                                : null
+                            }
                         </section>
+                        {/* End of Middle Inbox Section for Displaying Thread Details */}
+
+                        {/* Start of Last Inbox Section for displaying Company Details */}
                         <section className="bodyitem flex column">
 
                         </section>
