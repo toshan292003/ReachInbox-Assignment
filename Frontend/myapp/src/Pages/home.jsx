@@ -197,13 +197,37 @@ export default function Home() {
     }
 
     const handleKeyPress = (event) => {
-        if (event.key === 'l') {
-            changetheme();
-            console.log('L key was pressed!');
+        if (event.key === 'd') {
+            if(selectedIndex !== null){
+                deleteSelectedEmail();
+            }
+            console.log("Key pressed.")
         }
     };
 
+    const deleteSelectedEmail = async ()=>{
+        try {
+            const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${data.data[selectedIndex].threadId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tok}`,
+                },
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            console.log(result.data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        fetchEmailData();
+        setSelectedIndex(null);
+        setSelectedEmails(0);
+    }
 
     const resetAPI = async ()=>{
         try {
@@ -225,6 +249,8 @@ export default function Home() {
             console.error('Error fetching data:', error);
         }
         fetchEmailData();
+        setThreadDetails(null);
+        setSelectedIndex(null);
     }
 
     useEffect(() => {
@@ -365,9 +391,10 @@ export default function Home() {
                                             </>
                                             : null
                                         }
-                                        <button>
-                                            Reply
-                                        </button>
+                                        <div>
+                                            <button onClick={deleteSelectedEmail}>Delete</button>
+                                            <button>Reply</button>
+                                        </div>
                                     </section>
                                 </>
                                 : null
