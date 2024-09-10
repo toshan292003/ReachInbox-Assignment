@@ -32,15 +32,15 @@ export default function Home() {
     const [searchParams, setSearchParams] = useSearchParams();
     const tok = searchParams.get("token")
     const [data, setData] = useState([]);
-    const[numEmails,setNumEmails] = useState(0);
-    const[selectedEmails,setSelectedEmails] = useState(0);
-    const[newReplies,setNewReplies] = useState(0);
+    const [numEmails, setNumEmails] = useState(0);
+    const [selectedEmails, setSelectedEmails] = useState(0);
+    const [newReplies, setNewReplies] = useState(0);
 
     const scrollDiv = useRef(null);
 
     const handleScroll = (e) => {
         if (scrollDiv.current) {
-            scrollDiv.current.scrollTop += e.deltaY*0.5; 
+            scrollDiv.current.scrollTop += e.deltaY * 0.5;
         }
     };
 
@@ -57,19 +57,19 @@ export default function Home() {
     //Function to convert time stamp to Email Date + time
     function convertTimestamp(timestamp) {
         const date = new Date(timestamp);
-      
+
         const day = date.getUTCDate();
-        const month = date.toLocaleString('default', { month: 'long' });
+        const month = date.toLocaleString('default', { month: 'short' });
         const year = date.getUTCFullYear();
-      
+
         let hours = date.getUTCHours();
         const minutes = date.getUTCMinutes();
-      
+
         const ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12 || 12;
         const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
         return `${day} ${month} ${year} : ${hours}:${formattedMinutes}${ampm}`;
-      }
+    }
     //Function to truncate email subjects
     function truncateString(str, n) {
         if (str.length > n) {
@@ -102,11 +102,11 @@ export default function Home() {
                 console.error('Error fetching data:', error);
             }
         };
-        
+
         fetchEmailData();
         GetRandColor();
     }, []);
-    
+
     useEffect(() => {
         console.log(numEmails)
         console.log('Data updated:', data);
@@ -196,6 +196,20 @@ export default function Home() {
             console.error('Error fetching data:', error);
         }
     }
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'l') {
+            changetheme();
+            console.log('L key was pressed!');
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     return (
         <>
@@ -313,6 +327,7 @@ export default function Home() {
                                                                 </span>
                                                             </div>
                                                             <div className="flex column threadBody" style={{ backgroundColor: ColorTheme.nav_back, border: ColorTheme.border, boxShadow: ColorTheme.boxshadow }}>
+                                                                <b>{convertTimestamp(user.createdAt)}</b>
                                                                 <h4>{user.fromName}</h4>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>from : {user.fromEmail}</span>
                                                                 <span style={{ color: ColorTheme.secondarytextcolor }}>to : {user.toEmail}</span>
