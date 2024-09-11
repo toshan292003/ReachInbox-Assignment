@@ -39,6 +39,7 @@ export default function Home() {
     const [selectedEmails, setSelectedEmails] = useState(0);
     const [newReplies, setNewReplies] = useState(0);
     const [deletePopup, setdeletePopup] = useState(false);
+    const [searchQuery, setsearchQuery] = useState(null);
 
     const scrollDiv = useRef(null);
 
@@ -47,6 +48,11 @@ export default function Home() {
             scrollDiv.current.scrollTop += e.deltaY * 0.5;
         }
     };
+
+    const updateSearchQuery = (e)=>{
+        setsearchQuery(e.target.value);
+        console.log(searchQuery);
+    }
 
     //Function to format email dates
     function formatEmailDate(timestamp) {
@@ -108,6 +114,10 @@ export default function Home() {
 
     useEffect(() => {
         fetchEmailData();
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
     }, []);
 
     useEffect(() => {
@@ -175,6 +185,7 @@ export default function Home() {
     const [selectedIndex, setSelectedIndex] = useState(null);
     const clickEmailBox = (index, ID) => {
         setSelectedIndex(index);
+        console.log(selectedIndex);
         setSelectedEmails(1);
         setThreadID(ID);
         getThreadDetails();
@@ -207,8 +218,8 @@ export default function Home() {
             if (selectedIndex != null) {
                 openDeleteModel();
             }
-            console.log(selectedIndex)
             console.log("Key pressed.")
+            console.log(selectedIndex)
         }
     };
 
@@ -267,13 +278,6 @@ export default function Home() {
         setThreadDetails(null);
         setSelectedIndex(null);
     }
-
-    useEffect(() => {
-        window.addEventListener('keydown', handleKeyPress);
-        return () => {
-            window.removeEventListener('keydown', handleKeyPress);
-        };
-    }, []);
 
     return (
         <>
@@ -339,7 +343,7 @@ export default function Home() {
                                 <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
                             <div className="search">
-                                <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} placeholder="Search" />
+                                <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} onChange={updateSearchQuery} placeholder="Search" />
                             </div>
                             <div className="flex row center between">
                                 <p className="flex center row"><span style={{ backgroundColor: ColorTheme.misc_back }}>{newReplies}</span><b>New Replies</b></p>

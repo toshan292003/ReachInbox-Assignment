@@ -10,7 +10,7 @@
     gap: 10px;
 }
 .bodyitem:nth-child(3) div h2{
-    width:88%;
+    width: 88%;
     border-radius: 5px;
     padding: 10px 20px;
     font-size: 1.2rem;
@@ -66,4 +66,12 @@
     height: 50px;
     width: 50px;
     border-radius: 50%;
+}
+
+.bodyitem:nth-child(3) hr,
+.bodyitem:nth-child(3) div:nth-child(2) ul,
+.bodyitem:nth-child(3) div:nth-child(2) ul li,
+.bodyitem:nth-child(3) div:nth-child(2) ul li section:nth-child(1) img,
+.bodyitem:nth-child(3) div:nth-child(2) ul li section:nth-child(1){
+    transition: all 0.5s ease;
 }
