@@ -1,0 +1,77 @@
+.replymodel{
+    position: absolute;
+    display: grid;
+    grid-template-rows: 10% 76% 14%;
+    height: 550px;
+    width: 50vw;
+    left: 50%;
+    bottom: 20px;
+    z-index: 10;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+.replymodel section:nth-child(1){
+    justify-content: space-between;
+    align-items: center;
+    padding: 0% 5%;
+    width: 90%;
+}
+.replymodel section:nth-child(1) button{
+    border: none;
+    background-color: transparent;
+    font-size: 1.3rem;
+}
+.replymodel section:nth-child(1) button:hover{
+    cursor: pointer;
+    transform: scale(120%);
+}
+
+
+
+
+
+.replymodel section:nth-child(3){
+    padding: 13px 13px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+.replymodel section:nth-child(3) button{
+    align-self: flex-start;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    background: linear-gradient(90deg,#465fdb,#0524bd);
+    padding: 10px 40px;
+    border: none;
+    color: white;
+    transition: all 0.5s ease;
+}
+.replymodel section:nth-child(3) button:hover{
+    cursor: pointer;
+}
+.replymodel section:nth-child(3) img{
+    height: 25px;
+}
+
+
+
+
+.replymodel section:nth-child(2){
+    
+}
+
+.replymodel section:nth-child(2) div{
+    padding: 10px 30px;
+}
+.replymodel section:nth-child(2) div input{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    margin-left: 10px;
+    font-size: 1rem;
+}
+

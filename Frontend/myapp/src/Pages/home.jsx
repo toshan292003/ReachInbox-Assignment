@@ -19,6 +19,19 @@ import moreW from "../Images/moreW.png";
 import sendW from "../Images/sendW.png";
 import statisticsW from "../Images/statisticsW.png";
 
+import flashB from "../Images/flashB.png";
+import flashW from "../Images/flashW.png";
+import addB from "../Images/addB.png";
+import addW from "../Images/addW.png";
+import emojiB from "../Images/emojiB.png";
+import emojiW from "../Images/emojiW.png";
+import eyeB from "../Images/eyeB.png";
+import eyeW from "../Images/eyeW.png";
+import linkB from "../Images/linkB.png";
+import linkW from "../Images/linkW.png";
+import photoB from "../Images/photoB.png";
+import photoW from "../Images/photoW.png";
+
 import sun from "../Images/sun.png"
 import moon from "../Images/night.png"
 import { useRef } from "react";
@@ -28,6 +41,7 @@ import "../components/emailcard.css";
 import "../components/threads.css";
 import "../components/deletemodel.css";
 import "../components/misc.css";
+import "../components/replymodel.css";
 
 export default function Home() {
 
@@ -39,7 +53,8 @@ export default function Home() {
     const [selectedEmails, setSelectedEmails] = useState(0);
     const [newReplies, setNewReplies] = useState(0);
     const [deletePopup, setdeletePopup] = useState(false);
-    const [searchQuery, setsearchQuery] = useState(null);
+    const [replyPopup, setreplyPopup] = useState(false);
+    const [searchQuery, setsearchQuery] = useState("");
 
     const scrollDiv = useRef(null);
 
@@ -49,10 +64,33 @@ export default function Home() {
         }
     };
 
-    const updateSearchQuery = (e)=>{
+    //Function set for Search Queries
+    const updateSearchQuery = (e) => {
         setsearchQuery(e.target.value);
-        console.log(searchQuery);
+        if (checkPresenseofSearch(data.data[selectedIndex])) {
+            console.log("String is Present in Email.");
+        }
     }
+
+    function checkPresenseofSearch(obj) {
+        if (searchQuery == "") return true;
+
+        if (!obj || typeof obj !== 'object') {
+            console.error("Invalid object provided:", obj);
+            return true;
+        }
+        console.log("Object Given : ");
+        console.log(obj);
+        const { body, subject } = obj;
+        console.log(body);
+        console.log(subject);
+
+        return (
+            (body && body.includes(searchQuery)) ||
+            (subject && subject.includes(searchQuery))
+        );
+    }
+    //Function set for Search Queries Ends
 
     //Function to format email dates
     function formatEmailDate(timestamp) {
@@ -143,13 +181,21 @@ export default function Home() {
         primary_back: "#000000",
         secondary_back: "#202020",
         nav_back: "#101010",
-        misc_back:"#101010",
+        misc_back: "#101010",
         datebox: "#151515",
         boxshadow: "0px 5px 20px rgba(255,255,255,0.1)",
         border: "1px solid #303030",
         left: "5px",
         logo: Logo,
-        Icons: [homeW, magW, sendW, moreW, inboxW, statisticsW]
+        Icons: [homeW, magW, sendW, moreW, inboxW, statisticsW],
+        pictures: [
+            { img: flashW, name: "Variables" },
+            { img: eyeW, name: "Preview Email" },
+            { img: linkW, name: "" },
+            { img: photoW, name: "" },
+            { img: emojiW, name: "" },
+            { img: addW, name: "" }
+        ]
     }
     const [ColorTheme, setColorTheme] = useState(defaultColorMode);
 
@@ -168,13 +214,21 @@ export default function Home() {
                 primary_back: "#FFFFFF",
                 border: "1px solid #AAAAAA",
                 datebox: "#CCCCCC",
-                misc_back:"#DDDDDD",
+                misc_back: "#DDDDDD",
                 boxshadow: "0px 5px 20px rgba(0,0,0,0.1)",
                 secondary_back: "#FFFFFF",
                 nav_back: "transparent",
                 logo: LogoB,
                 left: "40px",
-                Icons: [homeB, magB, sendB, moreB, inboxB, statisticsB]
+                Icons: [homeB, magB, sendB, moreB, inboxB, statisticsB],
+                pictures: [
+                    { img: flashB, name: "Variables" },
+                    { img: eyeB, name: "Preview Email" },
+                    { img: linkB, name: "" },
+                    { img: photoB, name: "" },
+                    { img: emojiB, name: "" },
+                    { img: addB, name: "" }
+                ]
             }));
         }
     }
@@ -218,16 +272,22 @@ export default function Home() {
             if (selectedIndex != null) {
                 openDeleteModel();
             }
-            console.log("Key pressed.")
             console.log(selectedIndex)
+            console.log("Key pressed.")
         }
     };
 
     const openDeleteModel = () => {
         setdeletePopup(true);
     }
+    const openReplyModel = () => {
+        setreplyPopup(true);
+    }
     const cancelDelete = () => {
         setdeletePopup(false);
+    }
+    const cancelReply = () => {
+        setreplyPopup(false);
     }
 
     const deleteSelectedEmail = async () => {
@@ -338,7 +398,7 @@ export default function Home() {
                         {/* Start of Left Side Inbox Section */}
                         <section className="bodyitem flex column" style={{ borderRight: ColorTheme.border }}>
                             <h1>All Inbox&#40;s&#41;</h1>
-                            <button style={{ border: ColorTheme.border, backgroundColor: ColorTheme.misc_back ,color:ColorTheme.textcolor}} onClick={resetAPI}>&#8634;</button>
+                            <button style={{ border: ColorTheme.border, backgroundColor: ColorTheme.misc_back, color: ColorTheme.textcolor }} onClick={resetAPI}>&#8634;</button>
                             <p>
                                 <b>{selectedEmails}/{numEmails}</b><span style={{ color: ColorTheme.secondarytextcolor }}>  Inboxes Selected</span>
                             </p>
@@ -355,17 +415,20 @@ export default function Home() {
                                 </select>
                             </div>
                             <div className="flex column center" style={{ gap: "0px" }}>
-                                {Array.isArray(data.data) && data.data.length > 0 ? (
-                                    data.data.map((user, index) => (
-                                        <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
-                                            <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
-                                            <h2>{truncateString(user.fromEmail, 15)}</h2>
-                                            <p>{truncateString(user.subject, 30)}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No data available</p>
-                                )}
+                                {
+                                    Array.isArray(data.data) && data.data.length > 0 ? (
+                                        data.data.map((user, index) => (
+                                            checkPresenseofSearch(user) ? (
+                                                <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
+                                                    <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
+                                                    <h2>{truncateString(user.fromEmail, 15)}</h2>
+                                                    <p>{truncateString(user.subject, 30)}</p>
+                                                </div>
+                                            ) : null
+                                        ))
+                                    ) : (
+                                        <p>No Emails Available</p>
+                                    )}
                             </div>
                         </section>
                         {/* End of Left Side Inbox Section */}
@@ -412,7 +475,7 @@ export default function Home() {
                                         }
                                         <div>
                                             <button onClick={openDeleteModel}>Delete</button>
-                                            <button>Reply</button>
+                                            <button onClick={openReplyModel}>Reply</button>
                                         </div>
                                     </section>
                                 </>
@@ -427,7 +490,7 @@ export default function Home() {
                                 selectedIndex !== null ?
                                     <>
                                         <div className="flex column">
-                                            <h2 style={{backgroundColor:ColorTheme.misc_back}}>Lead Details</h2>
+                                            <h2 style={{ backgroundColor: ColorTheme.misc_back }}>Lead Details</h2>
                                             <ul className="flex column">
                                                 <li>
                                                     <span style={{ color: ColorTheme.textcolor }}>Name</span>
@@ -452,23 +515,23 @@ export default function Home() {
                                             </ul>
                                         </div>
                                         <div className="flex column">
-                                            <h2 style={{backgroundColor:ColorTheme.misc_back}}>Activities</h2>
+                                            <h2 style={{ backgroundColor: ColorTheme.misc_back }}>Activities</h2>
                                             <p>Campaign Name</p>
-                                            <p style={{color:ColorTheme.secondarytextcolor}}>3 Steps | 5 Days in Sequence</p>
+                                            <p style={{ color: ColorTheme.secondarytextcolor }}>3 Steps | 5 Days in Sequence</p>
                                             <ul className="flex column">
-                                                <hr style={{backgroundColor:ColorTheme.misc_back}} />
+                                                <hr style={{ backgroundColor: ColorTheme.misc_back }} />
                                                 <li className="flex row">
-                                                    <section className="flex row center" style={{border:ColorTheme.border,backgroundColor:ColorTheme.misc_back}}><img src={ColorTheme.Icons[2]}/></section>
+                                                    <section className="flex row center" style={{ border: ColorTheme.border, backgroundColor: ColorTheme.misc_back }}><img src={ColorTheme.Icons[2]} /></section>
                                                     <section className="flex column">
-                                                        <span style={{color:ColorTheme.textcolor}}>Step 1 : Email</span>
-                                                        <span style={{color:ColorTheme.secondarytextcolor}}>Sent 3rd, Feb</span>
+                                                        <span style={{ color: ColorTheme.textcolor }}>Step 1 : Email</span>
+                                                        <span style={{ color: ColorTheme.secondarytextcolor }}>Sent 3rd, Feb</span>
                                                     </section>
                                                 </li>
                                                 <li className="flex row">
-                                                    <section className="flex row center" style={{border:ColorTheme.border,backgroundColor:ColorTheme.misc_back}}><img src={ColorTheme.Icons[2]}/></section>
+                                                    <section className="flex row center" style={{ border: ColorTheme.border, backgroundColor: ColorTheme.misc_back }}><img src={ColorTheme.Icons[2]} /></section>
                                                     <section className="flex column">
-                                                        <span style={{color:ColorTheme.textcolor}}>Step 2 : Email</span>
-                                                        <span style={{color:ColorTheme.secondarytextcolor}}>Opened 5th, Feb</span>
+                                                        <span style={{ color: ColorTheme.textcolor }}>Step 2 : Email</span>
+                                                        <span style={{ color: ColorTheme.secondarytextcolor }}>Opened 5th, Feb</span>
                                                     </section>
                                                 </li>
                                             </ul>
@@ -482,24 +545,76 @@ export default function Home() {
 
                     </section>
                 </div>
-            </div>
+            </div >
             {/* Start of Delete Popup */}
-            {deletePopup == true ?
-                <>
-                    <div className="deletemodel flex column center">
-                        <section>
-                            <h1>Are you sure?</h1>
-                            <p>Your Selected Email will be deleted</p>
-                            <div>
-                                <button onClick={cancelDelete}>Cancel</button>
-                                <button onClick={deleteSelectedEmail}>Delete</button>
-                            </div>
-                        </section>
-                    </div>
-                </>
-                :
-                (<></>)
+            {
+                deletePopup == true ?
+                    <>
+                        <div className="deletemodel flex column center">
+                            <section>
+                                <h1>Are you sure?</h1>
+                                <p>Your Selected Email will be deleted</p>
+                                <div>
+                                    <button onClick={cancelDelete}>Cancel</button>
+                                    <button onClick={deleteSelectedEmail}>Delete</button>
+                                </div>
+                            </section>
+                        </div>
+                    </>
+                    :
+                    (<></>)
             }
+
+            {
+                replyPopup == true ?
+                    <>
+                        <div className="replymodel" style={{ border: ColorTheme.border, backgroundColor: ColorTheme.primary_back, color: ColorTheme.textcolor }}>
+                            <section className="flex row" style={{ backgroundColor: ColorTheme.misc_back, borderBottom: ColorTheme.border }}>
+                                <p>Reply</p>
+                                <button style={{ color: ColorTheme.textcolor }} onClick={cancelReply}>&#x2715;</button>
+                            </section>
+                            <section className="flex column">
+                                <div style={{borderBottom:ColorTheme.border}}>
+                                    <span style={{color:ColorTheme.secondarytextcolor}}>To : </span>
+                                    <input style={{color:ColorTheme.textcolor}} type="email" />
+                                </div>
+                                <div style={{borderBottom:ColorTheme.border}}>
+                                    <span style={{color:ColorTheme.secondarytextcolor}}>From : </span>
+                                    <input style={{color:ColorTheme.textcolor}} type="email" />
+                                </div>
+                                <div style={{borderBottom:ColorTheme.border}}>
+                                    <span style={{color:ColorTheme.secondarytextcolor}}>Subject : </span>
+                                    <input style={{color:ColorTheme.textcolor}} type="text" />
+                                </div>
+                                <input type="text" />
+                            </section>
+                            <section style={{ borderTop: ColorTheme.border }}>
+                                <button>Send</button>
+                                {Array.isArray(ColorTheme.pictures) && ColorTheme.pictures.length > 0 ? (
+                                    ColorTheme.pictures.map((item, index) => (
+                                        <>
+                                            <img src={item.img}/>
+                                            {
+                                                item.name!=="" ? 
+                                                <>
+                                                    <span style={{color:ColorTheme.secondarytextcolor}}>{item.name}</span>
+                                                </>
+                                                :
+                                                (<></>)
+                                            }
+                                        </>
+                                    ))
+                                ) : (
+                                    null
+                                )}
+                            </section>
+                        </div>
+                    </>
+                    :
+                    (<></>)
+            }
+
+
             {/* End of Delete Popup */}
         </>
     )
