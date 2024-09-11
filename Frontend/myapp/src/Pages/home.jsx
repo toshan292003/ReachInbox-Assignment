@@ -58,6 +58,8 @@ export default function Home() {
     const [toEmail, settoEmail] = useState("");
     const [fromEmail, setfromEmail] = useState("toshanyt@gmail.com");
     const [modeSelectedIndex, setModeSelectedIndex] = useState(1);
+    const [replySubject, setreplySubject] = useState("");
+    const [replyBody, setreplyBody] = useState("");
 
     const scrollDiv = useRef(null);
 
@@ -66,6 +68,15 @@ export default function Home() {
             scrollDiv.current.scrollTop += e.deltaY * 0.5;
         }
     };
+
+    const updateReplySubject = (e)=>{
+        setreplySubject(e.target.value);
+        console.log("Reply subject set to : "+replySubject);
+    }
+    const updateReplyBody = (e)=>{
+        setreplyBody(e.target.value);
+        console.log("Reply Body set to : "+replyBody);
+    }
 
     //Function set for Search Queries
     const updateSearchQuery = (e) => {
@@ -349,6 +360,40 @@ export default function Home() {
         setSelectedIndex(null);
     }
 
+    const replyAPI = async () => {
+        const jsonData = {
+            toName: data.data[selectedIndex].toName,
+            to: data.data[selectedIndex].toEmail,
+            from: data.data[selectedIndex].fromEmail,
+            fromName: data.data[selectedIndex].fromName,
+            subject: replySubject,
+            body: replyBody,
+            references: data.data[selectedIndex].references,
+            inReplyTo: data.data[selectedIndex].inReplyTo
+        };
+    
+        try {
+            const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reply/${data.data[selectedIndex].threadId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tok}`,
+                },
+                body: JSON.stringify(jsonData),  // Include the JSON payload in the body
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            console.log(result.data);
+        } catch (error) {
+            console.error('Error Feeding data:', error);
+        }
+    };
+    
+
     return (
         <>
             <div className="home flex row center">
@@ -600,14 +645,14 @@ export default function Home() {
                                 </div>
                                 <div style={{ borderBottom: ColorTheme.border }}>
                                     <span style={{ color: ColorTheme.secondarytextcolor }}>Subject : </span>
-                                    <input style={{ color: ColorTheme.textcolor }} type="text" />
+                                    <input style={{ color: ColorTheme.textcolor }} type="text" onChange={updateReplySubject} />
                                 </div>
                                 <p>
-                                    <textarea placeholder="Type your message here" style={{ color: ColorTheme.secondarytextcolor }} type="text" />
+                                    <textarea placeholder="Type your message here" style={{ color: ColorTheme.secondarytextcolor }} type="text" onChange={updateReplyBody} />
                                 </p>
                             </section>
                             <section style={{ borderTop: ColorTheme.border }}>
-                                <button>Send</button>
+                                <button onClick={replyAPI}>Send</button>
                                 {Array.isArray(ColorTheme.pictures) && ColorTheme.pictures.length > 0 ? (
                                     ColorTheme.pictures.map((item, index) => (
                                         <>
