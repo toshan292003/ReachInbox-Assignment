@@ -204,9 +204,10 @@ export default function Home() {
 
     const handleKeyPress = (event) => {
         if (event.key === 'd') {
-            if (selectedIndex !== null) {
-                deleteSelectedEmail();
+            if (selectedIndex != null) {
+                openDeleteModel();
             }
+            console.log(selectedIndex)
             console.log("Key pressed.")
         }
     };
