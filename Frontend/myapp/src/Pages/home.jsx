@@ -55,6 +55,9 @@ export default function Home() {
     const [deletePopup, setdeletePopup] = useState(false);
     const [replyPopup, setreplyPopup] = useState(false);
     const [searchQuery, setsearchQuery] = useState("");
+    const [toEmail, settoEmail] = useState("");
+    const [fromEmail, setfromEmail] = useState("toshanyt@gmail.com");
+    const [modeSelectedIndex, setModeSelectedIndex] = useState(1);
 
     const scrollDiv = useRef(null);
 
@@ -211,12 +214,12 @@ export default function Home() {
                 theme: "light",
                 textcolor: "#303030",
                 secondarytextcolor: "#606060",
-                primary_back: "#FFFFFF",
+                primary_back: "#EEEEEE",
                 border: "1px solid #AAAAAA",
                 datebox: "#CCCCCC",
                 misc_back: "#DDDDDD",
                 boxshadow: "0px 5px 20px rgba(0,0,0,0.1)",
-                secondary_back: "#FFFFFF",
+                secondary_back: "#CCCCCC",
                 nav_back: "transparent",
                 logo: LogoB,
                 left: "40px",
@@ -233,13 +236,20 @@ export default function Home() {
         }
     }
 
+    const changeMode = (key)=>{
+        setModeSelectedIndex(key);
+        console.log("Mode changed to : "+modeSelectedIndex);
+    }
+
     //State and Function to handle click of an email and update thread variables
     const [threadID, setThreadID] = useState("");
     const [threadDetails, setThreadDetails] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(null);
+
     const clickEmailBox = (index, ID) => {
         setSelectedIndex(index);
-        console.log(selectedIndex);
+        settoEmail(data.data[index].toEmail);
+        console.log("To email set to : " + toEmail);
         setSelectedEmails(1);
         setThreadID(ID);
         getThreadDetails();
@@ -352,9 +362,15 @@ export default function Home() {
                     <section className="navbar-item2 flex column center">
                         {
                             ColorTheme.Icons.map((image, i) => (
-                                <div className="flex center">
-                                    <img src={image} />
-                                </div>
+                                modeSelectedIndex === i ? (
+                                    <div className="flex center" key={i} style={{backgroundColor:ColorTheme.secondary_back}} onClick={()=>changeMode(i)}>
+                                        <img src={image} />
+                                    </div>
+                                ) : (
+                                    <div className="flex center" key={i} onClick={()=>setModeSelectedIndex(i)} style={{backgroundColor:"transparent"}}>
+                                        <img src={image} />
+                                    </div>
+                                )
                             ))
                         }
                     </section>
@@ -574,33 +590,35 @@ export default function Home() {
                                 <button style={{ color: ColorTheme.textcolor }} onClick={cancelReply}>&#x2715;</button>
                             </section>
                             <section className="flex column">
-                                <div style={{borderBottom:ColorTheme.border}}>
-                                    <span style={{color:ColorTheme.secondarytextcolor}}>To : </span>
-                                    <input style={{color:ColorTheme.textcolor}} type="email" />
+                                <div style={{ borderBottom: ColorTheme.border }}>
+                                    <span style={{ color: ColorTheme.secondarytextcolor }}>To : </span>
+                                    <input style={{ color: ColorTheme.textcolor }} type="email" value={toEmail} />
                                 </div>
-                                <div style={{borderBottom:ColorTheme.border}}>
-                                    <span style={{color:ColorTheme.secondarytextcolor}}>From : </span>
-                                    <input style={{color:ColorTheme.textcolor}} type="email" />
+                                <div style={{ borderBottom: ColorTheme.border }}>
+                                    <span style={{ color: ColorTheme.secondarytextcolor }}>From : </span>
+                                    <input style={{ color: ColorTheme.textcolor }} type="email" value={fromEmail} />
                                 </div>
-                                <div style={{borderBottom:ColorTheme.border}}>
-                                    <span style={{color:ColorTheme.secondarytextcolor}}>Subject : </span>
-                                    <input style={{color:ColorTheme.textcolor}} type="text" />
+                                <div style={{ borderBottom: ColorTheme.border }}>
+                                    <span style={{ color: ColorTheme.secondarytextcolor }}>Subject : </span>
+                                    <input style={{ color: ColorTheme.textcolor }} type="text" />
                                 </div>
-                                <input type="text" />
+                                <p>
+                                    <textarea placeholder="Type your message here" style={{ color: ColorTheme.secondarytextcolor }} type="text" />
+                                </p>
                             </section>
                             <section style={{ borderTop: ColorTheme.border }}>
                                 <button>Send</button>
                                 {Array.isArray(ColorTheme.pictures) && ColorTheme.pictures.length > 0 ? (
                                     ColorTheme.pictures.map((item, index) => (
                                         <>
-                                            <img src={item.img}/>
+                                            <img src={item.img} />
                                             {
-                                                item.name!=="" ? 
-                                                <>
-                                                    <span style={{color:ColorTheme.secondarytextcolor}}>{item.name}</span>
-                                                </>
-                                                :
-                                                (<></>)
+                                                item.name !== "" ?
+                                                    <>
+                                                        <span style={{ color: ColorTheme.secondarytextcolor }}>{item.name}</span>
+                                                    </>
+                                                    :
+                                                    (<></>)
                                             }
                                         </>
                                     ))
