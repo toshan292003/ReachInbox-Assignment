@@ -18,7 +18,7 @@ export default function Login(){
                 <section>
                     <div>
                         <h2>Create a new account</h2>
-                        <a href="https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=http://localhost:3000/home">
+                        <a href="https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=https://toshan-reachinbox-assignment.vercel.app//home">
                             <img src={googleLogo} alt="" />
                             <button>Sign up with Google</button>
                         </a>
