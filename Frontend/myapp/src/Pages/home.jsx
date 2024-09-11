@@ -69,13 +69,13 @@ export default function Home() {
         }
     };
 
-    const updateReplySubject = (e)=>{
+    const updateReplySubject = (e) => {
         setreplySubject(e.target.value);
-        console.log("Reply subject set to : "+replySubject);
+        console.log("Reply subject set to : " + replySubject);
     }
-    const updateReplyBody = (e)=>{
+    const updateReplyBody = (e) => {
         setreplyBody(e.target.value);
-        console.log("Reply Body set to : "+replyBody);
+        console.log("Reply Body set to : " + replyBody);
     }
 
     //Function set for Search Queries
@@ -247,9 +247,9 @@ export default function Home() {
         }
     }
 
-    const changeMode = (key)=>{
+    const changeMode = (key) => {
         setModeSelectedIndex(key);
-        console.log("Mode changed to : "+modeSelectedIndex);
+        console.log("Mode changed to : " + modeSelectedIndex);
     }
 
     //State and Function to handle click of an email and update thread variables
@@ -371,7 +371,7 @@ export default function Home() {
             references: data.data[selectedIndex].references,
             inReplyTo: data.data[selectedIndex].inReplyTo
         };
-    
+
         try {
             const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reply/${data.data[selectedIndex].threadId}`, {
                 method: 'POST',
@@ -381,18 +381,18 @@ export default function Home() {
                 },
                 body: JSON.stringify(jsonData),  // Include the JSON payload in the body
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const result = await response.json();
             console.log(result.data);
         } catch (error) {
             console.error('Error Feeding data:', error);
         }
     };
-    
+
 
     return (
         <>
@@ -408,13 +408,19 @@ export default function Home() {
                         {
                             ColorTheme.Icons.map((image, i) => (
                                 modeSelectedIndex === i ? (
-                                    <div className="flex center" key={i} style={{backgroundColor:ColorTheme.secondary_back}} onClick={()=>changeMode(i)}>
-                                        <img src={image} />
-                                    </div>
+                                    <>
+                                        <div className="flex center" key={i} style={{ backgroundColor: ColorTheme.secondary_back }} onClick={() => changeMode(i)}>
+                                            {i === 4 && <span className="flex center row">{numEmails}</span>}
+                                            <img src={image} />
+                                        </div>
+                                    </>
                                 ) : (
-                                    <div className="flex center" key={i} onClick={()=>setModeSelectedIndex(i)} style={{backgroundColor:"transparent"}}>
-                                        <img src={image} />
-                                    </div>
+                                    <>
+                                        <div className="flex center" key={i} onClick={() => setModeSelectedIndex(i)} style={{ backgroundColor: "transparent" }}>
+                                            {i === 4 && <span className="flex center row">{numEmails}</span>}
+                                            <img src={image} />
+                                        </div>
+                                    </>
                                 )
                             ))
                         }
@@ -466,7 +472,7 @@ export default function Home() {
                             <div className="search">
                                 <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} onChange={updateSearchQuery} placeholder="Search" />
                             </div>
-                            <div className="flex row center between" style={{borderBottom:ColorTheme.border,paddingBottom:"10px"}}>
+                            <div className="flex row center between" style={{ borderBottom: ColorTheme.border, paddingBottom: "10px" }}>
                                 <p className="flex center row"><span className="newReplies" style={{ backgroundColor: ColorTheme.misc_back }}>{newReplies}</span><b>New Replies</b></p>
                                 <select style={{ color: ColorTheme.textcolor }}>
                                     <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Newest</option>
