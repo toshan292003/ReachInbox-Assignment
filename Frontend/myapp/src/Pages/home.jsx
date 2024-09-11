@@ -263,9 +263,16 @@ export default function Home() {
         console.log("To email set to : " + toEmail);
         setSelectedEmails(1);
         setThreadID(ID);
-        getThreadDetails();
+        console.log("Thread Details : " + threadDetails);
+        setTimeout(() => {
+            getThreadDetails();
+        }, 0);
     };
-
+    useEffect(() => {
+        if (threadID) {
+            getThreadDetails();
+        }
+    }, [threadID]);
     const getThreadDetails = async () => {
         try {
             const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadID}`, {
@@ -282,7 +289,6 @@ export default function Home() {
 
             const result = await response.json();
             setThreadDetails(result)
-            console.log(result)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -293,8 +299,8 @@ export default function Home() {
             if (selectedIndex != null) {
                 openDeleteModel();
             }
-            console.log("Key pressed.")
             console.log(selectedIndex)
+            console.log("Key pressed.")
         }
     };
 
