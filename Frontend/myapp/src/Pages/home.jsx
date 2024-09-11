@@ -293,8 +293,8 @@ export default function Home() {
             if (selectedIndex != null) {
                 openDeleteModel();
             }
-            console.log(selectedIndex)
             console.log("Key pressed.")
+            console.log(selectedIndex)
         }
     };
 
@@ -466,8 +466,8 @@ export default function Home() {
                             <div className="search">
                                 <input type="text" style={{ backgroundColor: ColorTheme.secondary_back, border: ColorTheme.border, color: ColorTheme.textcolor }} onChange={updateSearchQuery} placeholder="Search" />
                             </div>
-                            <div className="flex row center between">
-                                <p className="flex center row"><span style={{ backgroundColor: ColorTheme.misc_back }}>{newReplies}</span><b>New Replies</b></p>
+                            <div className="flex row center between" style={{borderBottom:ColorTheme.border,paddingBottom:"10px"}}>
+                                <p className="flex center row"><span className="newReplies" style={{ backgroundColor: ColorTheme.misc_back }}>{newReplies}</span><b>New Replies</b></p>
                                 <select style={{ color: ColorTheme.textcolor }}>
                                     <option value="" style={{ backgroundColor: ColorTheme.primary_back }}>Newest</option>
                                     <option style={{ backgroundColor: ColorTheme.primary_back }}>Oldest</option>
@@ -480,7 +480,7 @@ export default function Home() {
                                     Array.isArray(data.data) && data.data.length > 0 ? (
                                         data.data.map((user, index) => (
                                             checkPresenseofSearch(user) ? (
-                                                <div className="flex column emailcard" style={{ borderTop: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
+                                                <div className="flex column emailcard" style={{ borderBottom: ColorTheme.border, borderLeft: selectedIndex === index ? '5px solid #4285f4' : '5px solid transparent' }} key={index} onClick={() => clickEmailBox(index, user.threadId)}>
                                                     <span style={{ color: ColorTheme.secondarytextcolor }}>{formatEmailDate(user.createdAt)}</span>
                                                     <h2>{truncateString(user.fromEmail, 15)}</h2>
                                                     <p>{truncateString(user.subject, 30)}</p>
